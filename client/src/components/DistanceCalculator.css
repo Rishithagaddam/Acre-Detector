@@ -1,0 +1,446 @@
+.distance-calculator {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.distance-calculator h1 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 30px;
+  font-size: 24px;
+}
+
+.controls {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.start-btn, .stop-btn {
+  padding: 15px 30px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+.start-btn {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.start-btn:hover {
+  background-color: #45a049;
+}
+
+.stop-btn {
+  background-color: #f44336;
+  color: white;
+}
+
+.stop-btn:hover {
+  background-color: #da190b;
+}
+
+.stop-btn:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.stop-btn:disabled:hover {
+  background-color: #cccccc;
+}
+
+.tracking-info {
+  background: #e3f2fd;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.tracking-info p {
+  margin: 5px 0;
+  color: #1976d2;
+}
+
+.error {
+  background: #ffebee;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.error p {
+  color: #c62828;
+  margin: 0;
+}
+
+.error-actions {
+  margin-top: 15px;
+  text-align: center;
+}
+
+.results {
+  background: #e8f5e8;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+}
+
+.results h2 {
+  color: #2e7d32;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.result-item {
+  margin-bottom: 15px;
+  padding: 10px;
+  background: white;
+  border-radius: 5px;
+  border-left: 4px solid #4CAF50;
+}
+
+.result-item strong {
+  color: #2e7d32;
+}
+
+.result-item ul {
+  margin: 10px 0 0 20px;
+  padding: 0;
+}
+
+.result-item li {
+  margin: 5px 0;
+}
+
+.coordinates-info {
+  text-align: center;
+  color: #666;
+  font-style: italic;
+  margin-top: 15px;
+}
+
+.coordinates-info p {
+  margin: 0;
+}
+
+.instructions-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.instructions-content {
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  max-width: 500px;
+  margin: 20px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+}
+
+.instructions-content h3 {
+  color: #2e7d32;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.instructions-content ul {
+  margin: 20px 0;
+  padding-left: 0;
+  list-style: none;
+}
+
+.instructions-content li {
+  margin: 10px 0;
+  padding: 8px;
+  background: #f5f5f5;
+  border-radius: 5px;
+  border-left: 4px solid #4CAF50;
+}
+
+.instruction-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 25px;
+}
+
+.cancel-btn {
+  background-color: #757575;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.cancel-btn:hover {
+  background-color: #616161;
+}
+
+.accuracy-status {
+  background: #fff;
+  padding: 15px;
+  border-radius: 5px;
+  margin: 15px 0;
+  border-left: 4px solid;
+  text-align: center;
+}
+
+.accuracy-status p {
+  margin: 0;
+  font-weight: bold;
+}
+
+.measurement-info {
+  background: #e3f2fd;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 15px;
+}
+
+.measurement-info p {
+  margin: 5px 0;
+  color: #1976d2;
+}
+
+.action-buttons {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.repeat-btn {
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin: 0 10px;
+}
+
+.repeat-btn:hover {
+  background-color: #1976D2;
+}
+
+.average-results {
+  background: #f3e5f5;
+  padding: 20px;
+  border-radius: 5px;
+  margin-top: 20px;
+  border: 2px solid #9c27b0;
+}
+
+.average-results h2 {
+  color: #7b1fa2;
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.average-info {
+  background: #f3e5f5;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.average-info p {
+  margin: 0;
+  color: #7b1fa2;
+  font-style: italic;
+}
+
+.live-map-container {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.live-map-container h3 {
+  color: #2e7d32;
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 18px;
+}
+
+.map-wrapper {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  margin-bottom: 15px;
+}
+
+.gps-tracking-map {
+  border-radius: 8px;
+  max-width: 100%;
+  height: auto;
+}
+
+.custom-numbered-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.map-legend {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  color: #666;
+}
+
+.legend-color {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.legend-color.excellent {
+  background-color: #4CAF50;
+}
+
+.legend-color.good {
+  background-color: #FF9800;
+}
+
+.legend-color.poor {
+  background-color: #f44336;
+}
+
+.gps-waiting {
+  background: #fff3cd;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  text-align: center;
+  border-left: 4px solid #ffc107;
+}
+
+.gps-waiting p {
+  margin: 5px 0;
+  color: #856404;
+}
+
+.skipped-points-info {
+  background: #fff3cd;
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 10px;
+  text-align: center;
+  border-left: 3px solid #ffc107;
+  font-size: 11px;
+  color: #856404;
+}
+
+.skipped-points-info span {
+  font-weight: 500;
+}
+
+.performance-info {
+  background: #e8f5e8;
+  padding: 8px;
+  border-radius: 4px;
+  margin-top: 10px;
+  text-align: center;
+  border-left: 3px solid #4CAF50;
+  font-size: 11px;
+  color: #2e7d32;
+}
+
+.performance-info span {
+  font-weight: 500;
+}
+
+/* Responsive map adjustments */
+@media (max-width: 768px) {
+  .distance-calculator {
+    margin: 10px;
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  .live-map-container {
+    padding: 15px;
+    margin: 15px 0;
+  }
+  
+  .map-legend {
+    gap: 10px;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .legend-item {
+    font-size: 11px;
+    margin: 2px 0;
+  }
+  
+  .distance-calculator h1 {
+    font-size: 20px;
+  }
+  
+  .start-btn, .stop-btn {
+    padding: 12px 25px;
+    font-size: 16px;
+  }
+
+  .gps-tracking-map {
+    width: 100% !important;
+    height: auto !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .distance-calculator {
+    margin: 5px;
+    padding: 10px;
+  }
+
+  .live-map-container {
+    padding: 10px;
+  }
+
+  .map-legend {
+    font-size: 10px;
+  }
+
+  .instructions-content {
+    margin: 10px;
+    padding: 20px;
+  }
+}
+
