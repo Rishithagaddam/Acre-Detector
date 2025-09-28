@@ -118,7 +118,7 @@ const DistanceCalculator = () => {
         <div style={{ height: "400px", marginTop: "20px" }}>
           <MapContainer
             center={currentPos}
-            zoom={18}
+            zoom={25}
             scrollWheelZoom={true}
             style={{ height: "100%", width: "100%" }}
             key={currentPos.join(",")} // ensures new MapContainer instance
