@@ -101,6 +101,7 @@ const DistanceCalculator = () => {
   const areaSqMeters = polygonArea(coordinates);
   const acres = areaSqMeters / 4046.86;
   const guntas = areaSqMeters / 101.17;
+  const cents = areaSqMeters / 40.4686;
 
   return (
     <div className="distance-calculator">
@@ -125,6 +126,7 @@ const DistanceCalculator = () => {
       <p>చదరపు మీటర్లు: <strong>{areaSqMeters.toFixed(2)} m²</strong></p>
       <p>ఎకరాలు: <strong>{acres.toFixed(4)}</strong></p>
       <p>గుంటాలు: <strong>{guntas.toFixed(2)}</strong></p>
+      <p>సెంట్లు: <strong>{cents.toFixed(2)}</strong></p>
 
       <div className="coords">
         <h3>స్థాన సూచికలు:</h3>
