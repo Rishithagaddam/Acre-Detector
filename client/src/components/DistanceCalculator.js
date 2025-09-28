@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import "./DistanceCalculator.css";
+import React, { useState } from "react";
+import { MapContainer, TileLayer, Polyline, Marker, Popup } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 
-// Haversine formula to calculate distance between two coordinates in meters
+// Haversine & polygonArea formulas
 const haversineDistance = (coord1, coord2) => {
-  const R = 6371e3; // Earth radius in meters
+  const R = 6371e3;
   const lat1 = (coord1[0] * Math.PI) / 180;
   const lat2 = (coord2[0] * Math.PI) / 180;
   const deltaLat = ((coord2[0] - coord1[0]) * Math.PI) / 180;
@@ -14,29 +15,23 @@ const haversineDistance = (coord1, coord2) => {
     Math.cos(lat1) * Math.cos(lat2) * Math.sin(deltaLon / 2) ** 2;
 
   const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c; // distance in meters
+  return R * c;
 };
 
-// Shoelace formula for polygon area (in m²) using lat/lng
 const polygonArea = (coords) => {
-  if (coords.length < 3) return 0; // need at least 3 points
-
-  const R = 6378137; // Earth radius in meters (WGS84)
+  if (coords.length < 3) return 0;
+  const R = 6378137;
   let area = 0;
-
   for (let i = 0; i < coords.length; i++) {
     const [lat1, lon1] = coords[i];
     const [lat2, lon2] = coords[(i + 1) % coords.length];
-
     const x1 = (lon1 * Math.PI) / 180 * R * Math.cos((lat1 * Math.PI) / 180);
     const y1 = (lat1 * Math.PI) / 180 * R;
     const x2 = (lon2 * Math.PI) / 180 * R * Math.cos((lat2 * Math.PI) / 180);
     const y2 = (lat2 * Math.PI) / 180 * R;
-
     area += x1 * y2 - x2 * y1;
   }
-
-  return Math.abs(area / 2); // area in m²
+  return Math.abs(area / 2);
 };
 
 const DistanceCalculator = () => {
@@ -45,10 +40,9 @@ const DistanceCalculator = () => {
   const [watchId, setWatchId] = useState(null);
   const [isTracking, setIsTracking] = useState(false);
   const [totalDistance, setTotalDistance] = useState(0);
+  const [currentPos, setCurrentPos] = useState(null); // initially null
 
-  // Start tracking
   const startTracking = () => {
-    // Reset previous data when starting again
     setCoordinates([]);
     setTotalDistance(0);
     setError("");
@@ -57,17 +51,15 @@ const DistanceCalculator = () => {
       const id = navigator.geolocation.watchPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
+          const newCoord = [latitude, longitude];
+          setCurrentPos(newCoord);
 
           setCoordinates((prev) => {
-            const newCoords = [...prev, [latitude, longitude]];
+            const newCoords = [...prev, newCoord];
 
-            // Calculate distance incrementally
             if (newCoords.length > 1) {
               const lastCoord = newCoords[newCoords.length - 2];
-              const newCoord = newCoords[newCoords.length - 1];
               const dist = haversineDistance(lastCoord, newCoord);
-
-              // Add all movements (no filter for small movement)
               setTotalDistance((prevDist) => prevDist + dist);
             }
 
@@ -75,11 +67,7 @@ const DistanceCalculator = () => {
           });
         },
         (err) => setError(err.message),
-        {
-          enableHighAccuracy: true,
-          maximumAge: 0, // always get fresh location
-          timeout: 10000, // wait max 10 seconds
-        }
+        { enableHighAccuracy: true, maximumAge: 0, timeout: 10000 }
       );
       setWatchId(id);
       setIsTracking(true);
@@ -88,7 +76,6 @@ const DistanceCalculator = () => {
     }
   };
 
-  // Stop tracking
   const stopTracking = () => {
     if (watchId !== null) {
       navigator.geolocation.clearWatch(watchId);
@@ -97,7 +84,6 @@ const DistanceCalculator = () => {
     setIsTracking(false);
   };
 
-  // Calculate area
   const areaSqMeters = polygonArea(coordinates);
   const acres = areaSqMeters / 4046.86;
   const guntas = areaSqMeters / 101.17;
@@ -106,7 +92,6 @@ const DistanceCalculator = () => {
   return (
     <div className="distance-calculator">
       <h1>GPS భూవ్యవస్థాపన మరియు దూరం లెక్కింపు</h1>
-
       {error && <p className="error">{error}</p>}
 
       <div className="controls">
@@ -128,7 +113,27 @@ const DistanceCalculator = () => {
       <p>గుంటాలు: <strong>{guntas.toFixed(2)}</strong></p>
       <p>సెంట్లు: <strong>{cents.toFixed(2)}</strong></p>
 
-      
+      {/* Only show map after tracking starts */}
+      {isTracking && currentPos && (
+        <div style={{ height: "400px", marginTop: "20px" }}>
+          <MapContainer
+            center={currentPos}
+            zoom={18}
+            scrollWheelZoom={true}
+            style={{ height: "100%", width: "100%" }}
+            key={currentPos.join(",")} // ensures new MapContainer instance
+          >
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+            />
+            <Marker position={currentPos}>
+              <Popup>Current Location</Popup>
+            </Marker>
+            {coordinates.length > 1 && <Polyline positions={coordinates} color="blue" />}
+          </MapContainer>
+        </div>
+      )}
     </div>
   );
 };
