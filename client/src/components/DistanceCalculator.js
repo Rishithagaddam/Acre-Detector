@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Haversine & polygonArea formulas
+// Haversine distance formula
 const haversineDistance = (coord1, coord2) => {
   const R = 6371e3;
   const lat1 = (coord1[0] * Math.PI) / 180;
@@ -18,6 +18,7 @@ const haversineDistance = (coord1, coord2) => {
   return R * c;
 };
 
+// Polygon area formula
 const polygonArea = (coords) => {
   if (coords.length < 3) return 0;
   const R = 6378137;
@@ -40,7 +41,7 @@ const DistanceCalculator = () => {
   const [watchId, setWatchId] = useState(null);
   const [isTracking, setIsTracking] = useState(false);
   const [totalDistance, setTotalDistance] = useState(0);
-  const [currentPos, setCurrentPos] = useState(null); // initially null
+  const [currentPos, setCurrentPos] = useState(null);
 
   const startTracking = () => {
     setCoordinates([]);
@@ -113,19 +114,23 @@ const DistanceCalculator = () => {
       <p>గుంటాలు: <strong>{guntas.toFixed(2)}</strong></p>
       <p>సెంట్లు: <strong>{cents.toFixed(2)}</strong></p>
 
-      {/* Only show map after tracking starts */}
+      {/* Map only shows when tracking and current position exist */}
       {isTracking && currentPos && (
         <div style={{ height: "400px", marginTop: "20px" }}>
           <MapContainer
             center={currentPos}
-            zoom={25}
+            zoom={20} // Max zoom for Mapbox/OpenStreetMap tiles
             scrollWheelZoom={true}
             style={{ height: "100%", width: "100%" }}
-            key={currentPos.join(",")} // ensures new MapContainer instance
+            key={currentPos.join(",")}
           >
             <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+              // Mapbox tiles for higher zoom
+              url="https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v12/tiles/{z}/{x}/{y}?access_token=YOUR_MAPBOX_ACCESS_TOKEN"
+              attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
+              tileSize={512}
+              zoomOffset={-1}
+              maxZoom={25}
             />
             <Marker position={currentPos}>
               <Popup>Current Location</Popup>
