@@ -128,16 +128,7 @@ const DistanceCalculator = () => {
       <p>గుంటాలు: <strong>{guntas.toFixed(2)}</strong></p>
       <p>సెంట్లు: <strong>{cents.toFixed(2)}</strong></p>
 
-      <div className="coords">
-        <h3>స్థాన సూచికలు:</h3>
-        <ul>
-          {coordinates.map((coord, i) => (
-            <li key={i}>
-              అక్షాంశం: {coord[0].toFixed(6)}, రేఖాంశం: {coord[1].toFixed(6)}
-            </li>
-          ))}
-        </ul>
-      </div>
+      
     </div>
   );
 };
