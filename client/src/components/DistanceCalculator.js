@@ -1,7 +1,18 @@
 import React, { useState } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+import markerIcon from "leaflet/dist/images/marker-icon.png";
+import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
+const DefaultIcon = L.icon({
+  iconUrl: markerIcon,
+  shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
 // Haversine & polygonArea formulas
 const haversineDistance = (coord1, coord2) => {
   const R = 6371e3;
@@ -113,29 +124,51 @@ const DistanceCalculator = () => {
       <p>గుంటాలు: <strong>{guntas.toFixed(2)}</strong></p>
       <p>సెంట్లు: <strong>{cents.toFixed(2)}</strong></p>
 
+
+
+
       {/* Only show map after tracking starts */}
       {isTracking && currentPos && (
-        <div style={{ height: "400px", marginTop: "20px" }}>
-          <MapContainer
-            center={currentPos}
-            zoom={25}
-            scrollWheelZoom={true}
-            style={{ height: "100%", width: "100%" }}
-            key={currentPos.join(",")} // ensures new MapContainer instance
-          >
-            <TileLayer
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-            />
-            <Marker position={currentPos}>
-              <Popup>Current Location</Popup>
-            </Marker>
-            {coordinates.length > 1 && <Polyline positions={coordinates} color="blue" />}
-          </MapContainer>
-        </div>
-      )}
+        <div style={{ height: "500px", marginTop: "20px", borderRadius: "12px", overflow: "hidden", boxShadow: "0 4px 10px rgba(0,0,0,0.2)" }}>
+  <MapContainer
+    center={currentPos}
+    zoom={20}
+    scrollWheelZoom={true}
+    zoomControl={true}
+    style={{ height: "100%", width: "100%" }}
+    key={currentPos.join(",")}
+  >
+    {/* High-detail satellite map */}
+    <TileLayer
+      url="https://{s}.google.com/vt/lyrs=s,h&x={x}&y={y}&z={z}"
+      subdomains={["mt0", "mt1", "mt2", "mt3"]}
+      attribution="&copy; Google Maps Satellite"
+    />
+
+    {/* Marker with modern icon */}
+    <Marker position={currentPos}>
+      <Popup>
+        📍 <strong>మీ ప్రస్తుత స్థానం</strong> <br />
+        Coordinates: {currentPos[0].toFixed(5)}, {currentPos[1].toFixed(5)}
+      </Popup>
+    </Marker>
+
+    {/* Smooth path drawing */}
+    {coordinates.length > 1 && (
+      <Polyline
+        positions={coordinates}
+        color="lime"
+        weight={5}
+        opacity={0.8}
+        dashArray="6, 10"
+      />
+    )}
+  </MapContainer>
+</div>
+      )
+    }
     </div>
   );
 };
-
+L.Marker.prototype.options.icon = DefaultIcon;
 export default DistanceCalculator;
